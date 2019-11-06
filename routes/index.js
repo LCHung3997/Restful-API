@@ -2,6 +2,25 @@ var express = require("express");
 var router = express.Router();
 var db = require("../model/index.model");
 const passport = require("passport");
+var multer = require ('multer')
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
+
+// Upload Image
+router.post("/photo", upload.single("avatar"), (req, res, next) => {
+  // console.log(req.file);
+  return res.json({
+      avatar: req.file.path
+  });
+});
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
